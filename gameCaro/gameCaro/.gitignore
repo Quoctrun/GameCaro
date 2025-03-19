@@ -1,6 +1,6 @@
-# Visual Studio
+﻿# Bỏ qua thư mục bin và obj
+bin/
+obj/
 .vs/
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
+Debug/
+Release/
