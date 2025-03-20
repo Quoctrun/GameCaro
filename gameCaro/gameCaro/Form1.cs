@@ -20,7 +20,7 @@ namespace gameCaro
         {
             InitializeComponent();// Khởi tạo các thành phần giao diện của Form
 
-            ChessBoard = new ChessBoardManager(pnlChessBoard);// Khởi tạo đối tượng quản lý bàn cờ với Panel chứa bàn cờ (pnlChessBoard)
+            ChessBoard = new ChessBoardManager(pnlChessBoard, textBox_playername, pictureBox_infoplayer);// Khởi tạo đối tượng quản lý bàn cờ với Panelchess,playername,picture_info
 
 
             ChessBoard.DrawChessBoard();// Vẽ bàn cờ khi Form được khởi tạo
