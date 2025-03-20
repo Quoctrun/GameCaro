@@ -29,24 +29,34 @@
 
         private void InitializeComponent()
         {
+            this.pictureBox_infoplayer = new System.Windows.Forms.PictureBox();
             this.pnlChessBoard = new System.Windows.Forms.Panel();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelChat = new System.Windows.Forms.Panel();
             this.progressBar_cooldown = new System.Windows.Forms.ProgressBar();
-            this.textBox_playername = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.pictureBox_infoplayer = new System.Windows.Forms.PictureBox();
+            this.textBox_playername = new System.Windows.Forms.TextBox();
             this.btnReset = new System.Windows.Forms.Button();
             this.BtnLAN = new System.Windows.Forms.Button();
             this.textbox_IP = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_infoplayer)).BeginInit();
             this.panelInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panelChat.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_infoplayer)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // pictureBox_infoplayer
+            // 
+            this.pictureBox_infoplayer.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.pictureBox_infoplayer.Location = new System.Drawing.Point(3, 3);
+            this.pictureBox_infoplayer.Name = "pictureBox_infoplayer";
+            this.pictureBox_infoplayer.Size = new System.Drawing.Size(187, 169);
+            this.pictureBox_infoplayer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_infoplayer.TabIndex = 6;
+            this.pictureBox_infoplayer.TabStop = false;
             // 
             // pnlChessBoard
             // 
@@ -103,17 +113,6 @@
             this.progressBar_cooldown.Size = new System.Drawing.Size(194, 23);
             this.progressBar_cooldown.TabIndex = 9;
             // 
-            // textBox_playername
-            // 
-            this.textBox_playername.Font = new System.Drawing.Font("Times New Roman", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_playername.Location = new System.Drawing.Point(14, 102);
-            this.textBox_playername.Name = "textBox_playername";
-            this.textBox_playername.ReadOnly = true;
-            this.textBox_playername.Size = new System.Drawing.Size(197, 22);
-            this.textBox_playername.TabIndex = 8;
-            this.textBox_playername.Text = "player name";
-            this.textBox_playername.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -125,14 +124,16 @@
             this.label1.Text = "5 in a line to win";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // pictureBox_infoplayer
+            // textBox_playername
             // 
-            this.pictureBox_infoplayer.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.pictureBox_infoplayer.Location = new System.Drawing.Point(3, 3);
-            this.pictureBox_infoplayer.Name = "pictureBox_infoplayer";
-            this.pictureBox_infoplayer.Size = new System.Drawing.Size(187, 169);
-            this.pictureBox_infoplayer.TabIndex = 6;
-            this.pictureBox_infoplayer.TabStop = false;
+            this.textBox_playername.Font = new System.Drawing.Font("Times New Roman", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_playername.Location = new System.Drawing.Point(14, 102);
+            this.textBox_playername.Name = "textBox_playername";
+            this.textBox_playername.ReadOnly = true;
+            this.textBox_playername.Size = new System.Drawing.Size(197, 22);
+            this.textBox_playername.TabIndex = 8;
+            this.textBox_playername.Text = "player name";
+            this.textBox_playername.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // btnReset
             // 
@@ -181,11 +182,11 @@
             this.Controls.Add(this.panelChat);
             this.Name = "Form1";
             this.Text = "Game Caro";
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_infoplayer)).EndInit();
             this.panelInfo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panelChat.ResumeLayout(false);
             this.panelChat.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_infoplayer)).EndInit();
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -194,10 +195,10 @@
         #endregion
 
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.PictureBox pictureBox_infoplayer;
         private System.Windows.Forms.TextBox textBox_playername;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ProgressBar progressBar_cooldown;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.PictureBox pictureBox_infoplayer;
     }
 }
