@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameCaro;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,14 +13,20 @@ namespace gameCaro
 {
     public partial class Form1 : Form
     {
+        #region Properties
+        ChessBoardManager ChessBoard; // Khai báo một đối tượng quản lý bàn cờ Caro
+        #endregion
         public Form1()
         {
-            InitializeComponent();
-        }
+            InitializeComponent();// Khởi tạo các thành phần giao diện của Form
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
+            ChessBoard = new ChessBoardManager(pnlChessBoard);// Khởi tạo đối tượng quản lý bàn cờ với Panel chứa bàn cờ (pnlChessBoard)
 
+
+            ChessBoard.DrawChessBoard();// Vẽ bàn cờ khi Form được khởi tạo
         }
+   
+
+
     }
 }

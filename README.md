@@ -1,2 +1,2 @@
 # GameCaro
-init caroGame
+init caroGame.
