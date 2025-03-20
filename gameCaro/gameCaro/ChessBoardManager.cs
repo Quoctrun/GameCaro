@@ -7,6 +7,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+
 
 namespace gameCaro
 {
@@ -45,10 +47,13 @@ namespace gameCaro
             this.ChessBoard = chessBoard;
             this.PlayerName1 = playerName;
             this.PlayerMark = mark;
+            string projectPath = Directory.GetParent(Application.StartupPath).Parent.FullName; // Lấy đường dẫn thư mục gốc của dự án
+            string resourcePath = Path.Combine(projectPath, "Resources"); // Đường dẫn đến thư mục Resources
+
             this.Player = new List<Player>()
             {
-                new Player("Huy", Image.FromFile(Application.StartupPath + "\\Resources\\dau_o.png")),// trích dẫn file resources
-                new Player("Tâm", Image.FromFile(Application.StartupPath + "\\Resources\\dau_x.png"))
+                new Player("Huy", Image.FromFile(Path.Combine(resourcePath, "dau_o.png"))), // Đường dẫn chính xác
+                new Player("Tâm", Image.FromFile(Path.Combine(resourcePath, "dau_x.png")))
             };
 
             CurrentPlayer = 0;
