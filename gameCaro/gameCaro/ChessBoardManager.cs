@@ -45,11 +45,45 @@ namespace gameCaro
             set { matrix = value; }
         }
 
+        private event EventHandler playerMarked;
+        public event EventHandler PlayerMarked
+        {
+            add
+            {
+                playerMarked += value;
+            }
+            remove
+            {
+                playerMarked -= value;
+            }
+        }
+        private event EventHandler endedGame;
+        public event EventHandler EndedGame
+        {
+            add
+            {
+                endedGame += value;
+            }
+            remove
+            {
+                endedGame -= value;
+            }
+        }
+
+        private Stack<Playinfo> playTimeLine;
+
+        public Stack<Playinfo> PlayTimeLine
+        {
+            get { return playTimeLine; }
+            set { playTimeLine = value; }
+        }
+
         #endregion
 
         #region Initialize
         public ChessBoardManager(Panel chessBoard, TextBox playerName, PictureBox mark) // cons khởi tạo bàn cờ caro với panel,playername,mark
         {
+
             this.ChessBoard = chessBoard;
             this.PlayerName1 = playerName;
             this.PlayerMark = mark;
@@ -58,12 +92,10 @@ namespace gameCaro
 
             this.Player = new List<Player>()
             {
-                new Player("Huy", Image.FromFile(Path.Combine(resourcePath, "dau_o.png"))), // Đường dẫn chính xác
-                new Player("Tâm", Image.FromFile(Path.Combine(resourcePath, "dau_x.png")))
+                new Player("P1", Image.FromFile(Path.Combine(resourcePath, "dau_o.png"))), // Đường dẫn chính xác
+                new Player("P2", Image.FromFile(Path.Combine(resourcePath, "dau_x.png")))
             };
-
-            CurrentPlayer = 0;
-            ChangePlayer(); // đổi lượt chơi cho người khác 
+            
         }
 
         #endregion
@@ -71,9 +103,15 @@ namespace gameCaro
         #region Methods
         public void DrawChessBoard()// phương pháp vẽ bàn cờ caro
         {
+            ChessBoard.Enabled = true;// bàn cờ caro có thể chơi
+            ChessBoard.Controls.Clear();// xóa các button cũ trên bàn cờ caro
+
+            PlayTimeLine = new Stack<Playinfo>();// khởi tạo stack lưu trữ lịch sử đánh cờ
+
+            CurrentPlayer = 0;
+            ChangePlayer(); // đổi lượt chơi cho người khác
 
             Matrix = new List<List<Button>>();
-
 
             Button oldButton = new Button() { Width = 0, Location = new Point(0, 0) };//tạo mới button để xác đinnh vị trí ban đầu bàn cơ caro
 
@@ -116,7 +154,14 @@ namespace gameCaro
 
             Mark(btn); // Đánh dấu ô cờ với hình tương ứng của người chơi hiện tại
 
+            PlayTimeLine.Push(new Playinfo(GetChessPoint(btn), CurrentPlayer));
+
+            CurrentPlayer = CurrentPlayer == 1 ? 0 : 1;// sài toán tử ba ngôi dùng để chuyên lượt chơi người này sang người chơi khác (ternary operator)
+
             ChangePlayer(); // Chuyển lượt sang người chơi tiếp theo
+             
+            if (playerMarked != null)
+                playerMarked(this, new EventArgs());
 
             if (isEndGame(btn))
             {
@@ -124,11 +169,36 @@ namespace gameCaro
             }
         }
 
-        private void EndGame() // Hộp thoại thông báo 
+        public void EndGame() // Hộp thoại thông báo 
         {
-            MessageBox.Show("Kết thúc game!");
+            if (endedGame != null)
+                endedGame(this, new EventArgs());
         }
 
+        public bool Reset() 
+        {
+            if (PlayTimeLine.Count <= 0)
+                return false;
+
+            Playinfo oldPoint = PlayTimeLine.Pop();
+            Button btn = Matrix[oldPoint.Point.Y][oldPoint.Point.X];
+
+            btn.BackgroundImage = null;
+
+            if (PlayTimeLine.Count <= 0)                
+                {                   
+                    CurrentPlayer = 0;
+                }
+                else
+                {
+                    oldPoint = PlayTimeLine.Peek();
+                    CurrentPlayer = oldPoint.CurrentPlayer == 1 ? 0 : 1;
+                }
+
+            ChangePlayer();
+
+            return false;
+        }
 
         private bool isEndGame(Button btn)
         {
@@ -270,8 +340,7 @@ namespace gameCaro
         private void Mark(Button btn) // đánh dấu ô click lên button người chơi 
         {
             btn.BackgroundImage = Player[CurrentPlayer].Mark;
-
-            CurrentPlayer = CurrentPlayer == 1 ? 0 : 1;// sài toán tử ba ngôi dùng để chuyên lượt chơi người này sang người chơi khác (ternary operator)
+            
         }
 
         private void ChangePlayer() // chuyển lượt người chơi
