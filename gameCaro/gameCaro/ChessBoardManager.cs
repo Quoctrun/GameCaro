@@ -45,8 +45,8 @@ namespace gameCaro
             set { matrix = value; }
         }
 
-        private event EventHandler playerMarked;
-        public event EventHandler PlayerMarked
+        private event EventHandler<ButtonClickEvent> playerMarked;
+        public event EventHandler<ButtonClickEvent> PlayerMarked
         {
             add
             {
@@ -161,14 +161,28 @@ namespace gameCaro
             ChangePlayer(); // Chuyển lượt sang người chơi tiếp theo
              
             if (playerMarked != null)
-                playerMarked(this, new EventArgs());
+                playerMarked(this, new ButtonClickEvent(GetChessPoint(btn)));
 
             if (isEndGame(btn))
             {
                 EndGame();
             }
         }
-
+        public void OtherPlayerMark(Point point) // Đánh dấu ô cờ của người chơi khác
+        {
+            Button btn = Matrix[point.Y][point.X];
+            if (btn.BackgroundImage != null)
+                return;
+            Mark(btn);
+            PlayTimeLine.Push(new Playinfo(point, CurrentPlayer));
+            CurrentPlayer = CurrentPlayer == 1 ? 0 : 1;
+            ChangePlayer();
+    
+            if (isEndGame(btn))
+            {
+                EndGame();
+            }
+        }
         public void EndGame() // Hộp thoại thông báo 
         {
             if (endedGame != null)
@@ -352,5 +366,20 @@ namespace gameCaro
 
         #endregion
 
+    }
+    public class ButtonClickEvent : EventArgs
+    {
+        private Point clickedPoint;
+
+        public Point ClickedPoint
+        {
+            get { return clickedPoint; }
+            set { clickedPoint = value; }
+        }
+
+        public ButtonClickEvent(Point point)
+        {
+            this.ClickedPoint = point;
+        }
     }
 }
