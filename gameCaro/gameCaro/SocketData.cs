@@ -11,7 +11,6 @@ namespace GameCaro
     public class SocketData
     {
         private int command;
-
         public int Command
         {
             get { return command; }
@@ -19,7 +18,6 @@ namespace GameCaro
         }
 
         private Point point;
-
         public Point Point
         {
             get { return point; }
@@ -27,18 +25,41 @@ namespace GameCaro
         }
 
         private string message;
-
         public string Message
         {
             get { return message; }
             set { message = value; }
         }
 
-        public SocketData(int command, string message, Point point)
+        private string chatMessage;
+        public string ChatMessage
         {
-            this.Command = command;
+            get { return chatMessage; }
+            set { chatMessage = value; }
+        }
+
+        private string sender;
+        public string Sender
+        {
+            get { return sender; }
+            set { sender = value; }
+        }
+
+        private DateTime timestamp;
+        public DateTime Timestamp
+        {
+            get { return timestamp; }
+            set { timestamp = value; }
+        }
+
+        public SocketData(int commmand, string message, Point point, string sender = "", DateTime timestamp = default, string chatMessage = "")
+        {
+            this.Command = commmand;
             this.Point = point;
             this.Message = message;
+            this.Timestamp = timestamp == default(DateTime) ? DateTime.Now : timestamp;
+            this.sender = sender;
+            this.chatMessage = chatMessage;
         }
     }
 
@@ -46,9 +67,11 @@ namespace GameCaro
     {
         SEND_POINT,
         NOTIFY,
-        NEW_GAME,
         UNDO,
+        NEW_GAME,
         END_GAME,
-        QUIT
+        TIME_OUT,
+        QUIT,
+        SEND_MESSAGE
     }
 }

@@ -52,7 +52,6 @@ namespace gameCaro
             tmcooldown.Stop();// Dừng đếm thời gian
             pnlChessBoard.Enabled = false;// Không cho người chơi đánh tiếp
             resetToolStripMenuItem.Enabled = false;// Không cho phép quay lại
-            MessageBox.Show("Kết thúc");
         }
 
         void NewGame()
@@ -86,8 +85,9 @@ namespace gameCaro
         private void ChessBoard_EndedGame(object sender, EventArgs e)
         {
             EndGame();
+            socket.Send(new SocketData((int)SocketCommand.END_GAME, "", new Point()));
         }
-                  
+
         private void progressBar_cooldown_Click(object sender, EventArgs e)
         {
 
@@ -101,6 +101,7 @@ namespace gameCaro
             {
                 
                 EndGame();// Kết thúc game
+                socket.Send(new SocketData((int)SocketCommand.TIME_OUT, "", new Point()));
             }
         }
 
@@ -113,7 +114,10 @@ namespace gameCaro
         {
 
         }
-
+        private void txt_result_TextChanged(object sender, EventArgs e)
+        {
+            // Chưa có hành động được định nghĩa
+        }
         private void textbox_IP_TextChanged(object sender, EventArgs e)
         {
 
@@ -124,15 +128,12 @@ namespace gameCaro
 
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-
 
         private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             NewGame();
+            socket.Send(new SocketData((int)SocketCommand.NEW_GAME, "", new Point()));
+            pnlChessBoard.Enabled = true;
         }
         private void resetToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -146,30 +147,45 @@ namespace gameCaro
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (MessageBox.Show("Bạn có chắc chắn muốn thoát?", "Thông báo", MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.Cancel)
-                      e.Cancel = true;
+            if (MessageBox.Show("Bạn có chắc muốn thoát", "Thông báo", MessageBoxButtons.OKCancel) != System.Windows.Forms.DialogResult.OK)
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                try
+                {
+                    socket.Send(new SocketData((int)SocketCommand.QUIT, "", new Point()));
+                }
+                catch { }
+            }
         }
 
         #endregion
 
         private void BtnLAN_Click(object sender, EventArgs e)
         {
-            socket.IP = textbox_IP.Text;
+            socket.IP = textbox_IP.Text; // Lấy IP từ TextBox
 
-            if (!socket.ConnectServer())
-            { 
+            if (!socket.ConnectServer()) // Nếu không thể kết nối, tạo server
+            {
                 socket.isServer = true;
-                pnlChessBoard.Enabled = true;
-                socket.CreateServer();
-
+                pnlChessBoard.Enabled = true; // Bật bàn cờ cho người tạo server
+                socket.CreateServer(); // Tạo server
+                MessageBox.Show("Server đã được tạo!");
             }
-            else
+            else // Nếu kết nối thành công
             {
                 socket.isServer = false;
-                pnlChessBoard.Enabled = false;
-                Listen();
-
+                pnlChessBoard.Enabled = false; // Đối thủ chờ lượt
+                MessageBox.Show("Kết nối thành công!");
             }
+
+            // Gọi hàm Listen ngay sau khi kết nối thành công
+            Listen();
+        }
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
 
         }
 
@@ -207,6 +223,11 @@ namespace gameCaro
                     MessageBox.Show(data.Message);
                     break;
                 case (int)SocketCommand.NEW_GAME:
+                    this.Invoke((MethodInvoker)(() =>
+                    {
+                        NewGame();
+                        pnlChessBoard.Enabled = false;
+                    }));
                     break;
                 case (int)SocketCommand.SEND_POINT:
                     this.Invoke((MethodInvoker)(() =>
@@ -217,11 +238,24 @@ namespace gameCaro
                      ChessBoard.OtherPlayerMark(data.Point);
                     }));
                     break;
+                    
+        case (int)SocketCommand.SEND_MESSAGE: // Xử lý tin nhắn nhận được
+            this.Invoke((MethodInvoker)(() =>
+            {
+                rtbChatBox.AppendText("Opponent: " + data.Message + Environment.NewLine);
+            }));
+            break;
                 case (int)SocketCommand.UNDO:
                     break;
                 case (int)SocketCommand.END_GAME:
+                    MessageBox.Show("Đã 5 con trên 1 hàng");
+                    break;
+                case (int)SocketCommand.TIME_OUT:
+                    MessageBox.Show("Hết giờ");
                     break;
                 case (int)SocketCommand.QUIT:
+                    tmcooldown.Stop();
+                    MessageBox.Show("Người chơi đã thoát");
                     break;
                 default:
                     break;
@@ -230,5 +264,40 @@ namespace gameCaro
             Listen();
         }
 
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtChatInput_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSendChat_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtChatInput.Text)) // Nếu tin nhắn không rỗng
+            {
+                // Hiển thị tin nhắn trong RichTextBox
+                rtbChatBox.AppendText("You: " + txtChatInput.Text + Environment.NewLine);
+
+                // Gửi tin nhắn qua socket
+                socket.Send(new SocketData(
+                    (int)SocketCommand.SEND_MESSAGE, // Lệnh gửi tin nhắn
+                    txtChatInput.Text,               // Nội dung tin nhắn
+                    new Point()                      // Không cần tọa độ
+                ));
+
+                // Xóa nội dung trong ô nhập
+                txtChatInput.Clear();
+            }
+        }
+
+        private void richTextBox1_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
     }
+    
+  
 }
