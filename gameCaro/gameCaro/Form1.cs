@@ -5,20 +5,29 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Schema;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace gameCaro
 {
     public partial class Form1 : Form
     {
+
         #region Properties
         ChessBoardManager ChessBoard; // Khai báo một đối tượng quản lý bàn cờ Caro
+        SocketManager socket;
         #endregion
         public Form1()
         {
             InitializeComponent();// Khởi tạo các thành phần giao diện của Form
+
+            Control.CheckForIllegalCrossThreadCalls = false;// Không kiểm tra lỗi giao diện
 
             ChessBoard = new ChessBoardManager(pnlChessBoard, textBox_playername, pictureBox_infoplayer);// Khởi tạo đối tượng quản lý bàn cờ với Panelchess,playername,picture_info
             ChessBoard.EndedGame += ChessBoard_EndedGame;// Gán sự kiện kết thúc game cho bàn cờ
@@ -32,11 +41,11 @@ namespace gameCaro
             tmcooldown.Interval = Cons.COOL_DOWN_INTERVAL;// Đặt thời gian cập nhật của progressbar
 
             ChessBoard.DrawChessBoard();// Vẽ bàn cờ khi Form được khởi tạo
-        
-            
+
+            socket = new SocketManager();// Khởi tạo đối tượng socket   
 
         }
-
+    
         #region
         void EndGame()
         {
@@ -64,12 +73,16 @@ namespace gameCaro
         {
             ChessBoard.Reset();// Đặt lại bàn cờ
         }
-        private void ChessBoard_PlayerMarked(object sender, EventArgs e)
+        private void ChessBoard_PlayerMarked(object sender, ButtonClickEvent e)
         {
             tmcooldown.Start();// Bắt đầu đếm thời gian
+            pnlChessBoard.Enabled = false;// Không cho người chơi đánh tiếp
             progressBar_cooldown.Value = 0;// Đặt giá trị ban đầu của progressbar
-        }
+            socket.Send(new SocketData((int)SocketCommand.SEND_POINT, "", e.ClickedPoint));
 
+
+            Listen();
+        }
         private void ChessBoard_EndedGame(object sender, EventArgs e)
         {
             EndGame();
@@ -138,5 +151,84 @@ namespace gameCaro
         }
 
         #endregion
+
+        private void BtnLAN_Click(object sender, EventArgs e)
+        {
+            socket.IP = textbox_IP.Text;
+
+            if (!socket.ConnectServer())
+            { 
+                socket.isServer = true;
+                pnlChessBoard.Enabled = true;
+                socket.CreateServer();
+
+            }
+            else
+            {
+                socket.isServer = false;
+                pnlChessBoard.Enabled = false;
+                Listen();
+
+            }
+
+        }
+
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            textbox_IP.Text = socket.GetLocalIPv4(NetworkInterfaceType.Wireless80211);
+
+            if (string.IsNullOrEmpty(textbox_IP.Text))
+            {
+                textbox_IP.Text = socket.GetLocalIPv4(NetworkInterfaceType.Ethernet);
+            }
+        }
+
+        void Listen()
+        {
+                Thread listenThread = new Thread(() =>
+                {
+                    try
+                    {
+                        SocketData data = (SocketData)socket.Receive();
+                        ProcessData(data);
+                    }
+                catch (Exception e  )
+                    { }
+                });
+                listenThread.IsBackground = true;
+                listenThread.Start();
+          
+        }
+        private void ProcessData(SocketData data)
+        {
+            switch (data.Command)
+            {
+                case (int)SocketCommand.NOTIFY:
+                    MessageBox.Show(data.Message);
+                    break;
+                case (int)SocketCommand.NEW_GAME:
+                    break;
+                case (int)SocketCommand.SEND_POINT:
+                    this.Invoke((MethodInvoker)(() =>
+                    {
+                     progressBar_cooldown.Value = 0;
+                     pnlChessBoard.Enabled = true;
+                     tmcooldown.Start();
+                     ChessBoard.OtherPlayerMark(data.Point);
+                    }));
+                    break;
+                case (int)SocketCommand.UNDO:
+                    break;
+                case (int)SocketCommand.END_GAME:
+                    break;
+                case (int)SocketCommand.QUIT:
+                    break;
+                default:
+                    break;
+            }
+
+            Listen();
+        }
+
     }
 }
