@@ -12,7 +12,7 @@ namespace GameCaro
         public static int CHESS_HEIGHT = 25;// độ cao của ô cờ button của bàn cơ caro
         
         public static int CHESS_BOARD_WIDTH = 40;// số lượng  của ô cờ button chieu ngang của bàn cơ caro
-        public static int CHESS_BOARD_HEIGHT = 25;// số lượng  của ô cờ button chieu dọc của bàn cơ caro
+        public static int CHESS_BOARD_HEIGHT = 26;// số lượng  của ô cờ button chieu dọc của bàn cơ caro
 
         public static int COOL_DOWN_STEP = 100;// số lượng  của ô cờ button chieu dọc của bàn cơ caro        
         public static int COOL_DOWN_TIME = 10000;// số lượng  của ô cờ button chieu dọc của bàn cơ caro

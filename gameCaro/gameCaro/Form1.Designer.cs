@@ -72,9 +72,10 @@ private System.Windows.Forms.Button BtnLAN;
             // 
             this.pnlChessBoard.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.pnlChessBoard.BackColor = System.Drawing.Color.White;
-            this.pnlChessBoard.Location = new System.Drawing.Point(0, 27);
+            this.pnlChessBoard.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlChessBoard.Location = new System.Drawing.Point(0, 48);
             this.pnlChessBoard.Name = "pnlChessBoard";
-            this.pnlChessBoard.Size = new System.Drawing.Size(979, 657);
+            this.pnlChessBoard.Size = new System.Drawing.Size(1539, 811);
             this.pnlChessBoard.TabIndex = 0;
             this.pnlChessBoard.TabStop = true;
             // 
@@ -219,7 +220,7 @@ private System.Windows.Forms.Button BtnLAN;
             this.menuToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1231, 30);
+            this.menuStrip1.Size = new System.Drawing.Size(1539, 38);
             this.menuStrip1.TabIndex = 8;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -260,10 +261,11 @@ private System.Windows.Forms.Button BtnLAN;
             // Form1
             // 
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.ClientSize = new System.Drawing.Size(1231, 680);
+            this.ClientSize = new System.Drawing.Size(1231, 687);
             this.Controls.Add(this.panelChat);
             this.Controls.Add(this.pnlChessBoard);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Game Caro";

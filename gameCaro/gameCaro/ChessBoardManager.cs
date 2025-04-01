@@ -137,7 +137,9 @@ namespace gameCaro
             }
             MessageBox.Show("Bàn cờ caro đã được tạo thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information); // hiện lên thông báo khi tạo bàn cơ caro
         }
+
        
+
         void btn_Click(object sender, EventArgs e)
         {
             Button btn = sender as Button; // Ép kiểu sender về Button (nút được nhấn)
