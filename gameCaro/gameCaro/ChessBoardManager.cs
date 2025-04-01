@@ -87,7 +87,7 @@ namespace gameCaro
             this.Player = new List<Player>()
             {
                 new Player("Player1", Image.FromFile(Path.Combine(resourcePath, "dau_o.png"))), // Đường dẫn chính xác
-                new Player("Player12", Image.FromFile(Path.Combine(resourcePath, "dau_x.png")))
+                new Player("Player2", Image.FromFile(Path.Combine(resourcePath, "dau_x.png")))
             };
         }
 
@@ -182,7 +182,7 @@ namespace gameCaro
             }
         }
 
-        public void EndGame() // Hộp thoại thông báo 
+        public void EndGame() // Hộp thoại thông báo hiển thị người chơi ai thắng và ai thua 
         {
             if (endedGame != null)
                 endedGame(this, new EventArgs());
