@@ -62,7 +62,7 @@ private System.Windows.Forms.Button BtnLAN;
             this.pictureBox_infoplayer.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.pictureBox_infoplayer.Location = new System.Drawing.Point(0, 0);
             this.pictureBox_infoplayer.Name = "pictureBox_infoplayer";
-            this.pictureBox_infoplayer.Size = new System.Drawing.Size(193, 46);
+            this.pictureBox_infoplayer.Size = new System.Drawing.Size(193, 153);
             this.pictureBox_infoplayer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_infoplayer.TabIndex = 6;
             this.pictureBox_infoplayer.TabStop = false;
@@ -70,8 +70,6 @@ private System.Windows.Forms.Button BtnLAN;
             // 
             // pnlChessBoard
             // 
-            this.pnlChessBoard.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlChessBoard.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.pnlChessBoard.BackColor = System.Drawing.Color.White;
             this.pnlChessBoard.Location = new System.Drawing.Point(0, 27);
@@ -84,9 +82,9 @@ private System.Windows.Forms.Button BtnLAN;
             // 
             this.panelInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panelInfo.Controls.Add(this.pictureBox_infoplayer);
-            this.panelInfo.Location = new System.Drawing.Point(32, 285);
+            this.panelInfo.Location = new System.Drawing.Point(32, 325);
             this.panelInfo.Name = "panelInfo";
-            this.panelInfo.Size = new System.Drawing.Size(193, 47);
+            this.panelInfo.Size = new System.Drawing.Size(193, 150);
             this.panelInfo.TabIndex = 1;
             // 
             // pictureBox1
@@ -94,9 +92,9 @@ private System.Windows.Forms.Button BtnLAN;
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.pictureBox1.Image = global::gameCaro.Properties.Resources.thi_dau_co_caro;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Location = new System.Drawing.Point(0, 3);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(193, 74);
+            this.pictureBox1.Size = new System.Drawing.Size(193, 156);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -124,16 +122,16 @@ private System.Windows.Forms.Button BtnLAN;
             // 
             // rtbChatBox
             // 
-            this.rtbChatBox.Location = new System.Drawing.Point(31, 353);
+            this.rtbChatBox.Location = new System.Drawing.Point(30, 481);
             this.rtbChatBox.Name = "rtbChatBox";
-            this.rtbChatBox.Size = new System.Drawing.Size(194, 240);
+            this.rtbChatBox.Size = new System.Drawing.Size(194, 131);
             this.rtbChatBox.TabIndex = 13;
             this.rtbChatBox.Text = "";
             this.rtbChatBox.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged_1);
             // 
             // progressBar_cooldown
             // 
-            this.progressBar_cooldown.Location = new System.Drawing.Point(31, 50);
+            this.progressBar_cooldown.Location = new System.Drawing.Point(36, 36);
             this.progressBar_cooldown.Name = "progressBar_cooldown";
             this.progressBar_cooldown.Size = new System.Drawing.Size(193, 24);
             this.progressBar_cooldown.TabIndex = 9;
@@ -143,18 +141,18 @@ private System.Windows.Forms.Button BtnLAN;
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.pictureBox1);
-            this.panel1.Location = new System.Drawing.Point(32, 204);
+            this.panel1.Location = new System.Drawing.Point(32, 157);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(193, 75);
+            this.panel1.Size = new System.Drawing.Size(193, 162);
             this.panel1.TabIndex = 7;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Times New Roman", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(26, 14);
+            this.label1.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(50, 8);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(203, 33);
+            this.label1.Size = new System.Drawing.Size(173, 25);
             this.label1.TabIndex = 7;
             this.label1.Text = "5 in a line to win";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -162,7 +160,7 @@ private System.Windows.Forms.Button BtnLAN;
             // textBox_playername
             // 
             this.textBox_playername.Font = new System.Drawing.Font("Times New Roman", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_playername.Location = new System.Drawing.Point(31, 89);
+            this.textBox_playername.Location = new System.Drawing.Point(36, 66);
             this.textBox_playername.Name = "textBox_playername";
             this.textBox_playername.ReadOnly = true;
             this.textBox_playername.Size = new System.Drawing.Size(193, 22);
@@ -173,7 +171,7 @@ private System.Windows.Forms.Button BtnLAN;
             // 
             // BtnLAN
             // 
-            this.BtnLAN.Location = new System.Drawing.Point(31, 169);
+            this.BtnLAN.Location = new System.Drawing.Point(36, 122);
             this.BtnLAN.Name = "BtnLAN";
             this.BtnLAN.Size = new System.Drawing.Size(193, 29);
             this.BtnLAN.TabIndex = 4;
@@ -184,7 +182,7 @@ private System.Windows.Forms.Button BtnLAN;
             // textbox_IP
             // 
             this.textbox_IP.Font = new System.Drawing.Font("Times New Roman", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textbox_IP.Location = new System.Drawing.Point(31, 129);
+            this.textbox_IP.Location = new System.Drawing.Point(36, 94);
             this.textbox_IP.Name = "textbox_IP";
             this.textbox_IP.Size = new System.Drawing.Size(193, 22);
             this.textbox_IP.TabIndex = 3;
@@ -194,7 +192,7 @@ private System.Windows.Forms.Button BtnLAN;
             // 
             // txtChatInput
             // 
-            this.txtChatInput.Location = new System.Drawing.Point(31, 599);
+            this.txtChatInput.Location = new System.Drawing.Point(32, 619);
             this.txtChatInput.Name = "txtChatInput";
             this.txtChatInput.Size = new System.Drawing.Size(138, 22);
             this.txtChatInput.TabIndex = 11;
@@ -202,7 +200,7 @@ private System.Windows.Forms.Button BtnLAN;
             // 
             // btnSendChat
             // 
-            this.btnSendChat.Location = new System.Drawing.Point(178, 598);
+            this.btnSendChat.Location = new System.Drawing.Point(176, 618);
             this.btnSendChat.Name = "btnSendChat";
             this.btnSendChat.Size = new System.Drawing.Size(47, 23);
             this.btnSendChat.TabIndex = 12;
@@ -221,7 +219,7 @@ private System.Windows.Forms.Button BtnLAN;
             this.menuToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1231, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1231, 30);
             this.menuStrip1.TabIndex = 8;
             this.menuStrip1.Text = "menuStrip1";
             // 

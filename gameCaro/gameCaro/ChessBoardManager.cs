@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
-
 namespace gameCaro
 {
     public class ChessBoardManager
@@ -25,7 +24,6 @@ namespace gameCaro
 
         private TextBox PlayerName; // ô nhập tên người chơi textBox_playername
 
-
         // các thuộc tính truy cập nếu muốn làm y chăng bấm phím tắt ctr + r + e là ra 
         public PictureBox PlayerMark1 { get => PlayerMark; set => PlayerMark = value; }
 
@@ -33,9 +31,6 @@ namespace gameCaro
         public List<Player> Player { get => player; set => player = value; }
         public int CurrentPlayer { get => _currentPlayer; set => _currentPlayer = value; }
         public TextBox PlayerName1 { get => PlayerName; set => PlayerName = value; }
-
-
-
 
         private List<List<Button>> matrix;
 
@@ -83,7 +78,6 @@ namespace gameCaro
         #region Initialize
         public ChessBoardManager(Panel chessBoard, TextBox playerName, PictureBox mark) // cons khởi tạo bàn cờ caro với panel,playername,mark
         {
-
             this.ChessBoard = chessBoard;
             this.PlayerName1 = playerName;
             this.PlayerMark = mark;
@@ -92,10 +86,9 @@ namespace gameCaro
 
             this.Player = new List<Player>()
             {
-                new Player("P1", Image.FromFile(Path.Combine(resourcePath, "dau_o.png"))), // Đường dẫn chính xác
-                new Player("P2", Image.FromFile(Path.Combine(resourcePath, "dau_x.png")))
+                new Player("Player1", Image.FromFile(Path.Combine(resourcePath, "dau_o.png"))), // Đường dẫn chính xác
+                new Player("Player12", Image.FromFile(Path.Combine(resourcePath, "dau_x.png")))
             };
-            
         }
 
         #endregion
@@ -114,7 +107,6 @@ namespace gameCaro
             Matrix = new List<List<Button>>();
 
             Button oldButton = new Button() { Width = 0, Location = new Point(0, 0) };//tạo mới button để xác đinnh vị trí ban đầu bàn cơ caro
-
 
             for (int i = 0; i < Cons.CHESS_BOARD_HEIGHT; i++)// lặp qua từng hàng chieu cao của bàn cơ caro
             {
@@ -145,6 +137,7 @@ namespace gameCaro
             }
             MessageBox.Show("Bàn cờ caro đã được tạo thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information); // hiện lên thông báo khi tạo bàn cơ caro
         }
+       
         void btn_Click(object sender, EventArgs e)
         {
             Button btn = sender as Button; // Ép kiểu sender về Button (nút được nhấn)
@@ -156,18 +149,20 @@ namespace gameCaro
 
             PlayTimeLine.Push(new Playinfo(GetChessPoint(btn), CurrentPlayer));
 
-            CurrentPlayer = CurrentPlayer == 1 ? 0 : 1;// sài toán tử ba ngôi dùng để chuyên lượt chơi người này sang người chơi khác (ternary operator)
-
-            ChangePlayer(); // Chuyển lượt sang người chơi tiếp theo
-             
-            if (playerMarked != null)
-                playerMarked(this, new ButtonClickEvent(GetChessPoint(btn)));
-
             if (isEndGame(btn))
             {
                 EndGame();
             }
+            else
+            {
+                CurrentPlayer = CurrentPlayer == 1 ? 0 : 1;// sài toán tử ba ngôi dùng để chuyên lượt chơi người này sang người chơi khác (ternary operator)
+                ChangePlayer(); // Chuyển lượt sang người chơi tiếp theo
+
+                if (playerMarked != null)
+                    playerMarked(this, new ButtonClickEvent(GetChessPoint(btn)));
+            }
         }
+
         public void OtherPlayerMark(Point point) // Đánh dấu ô cờ của người chơi khác
         {
             Button btn = Matrix[point.Y][point.X];
@@ -175,21 +170,29 @@ namespace gameCaro
                 return;
             Mark(btn);
             PlayTimeLine.Push(new Playinfo(point, CurrentPlayer));
-            CurrentPlayer = CurrentPlayer == 1 ? 0 : 1;
-            ChangePlayer();
-    
+
             if (isEndGame(btn))
             {
                 EndGame();
             }
+            else
+            {
+                CurrentPlayer = CurrentPlayer == 1 ? 0 : 1;
+                ChangePlayer();
+            }
         }
+
         public void EndGame() // Hộp thoại thông báo 
         {
             if (endedGame != null)
                 endedGame(this, new EventArgs());
+
+            string winner = Player[CurrentPlayer].Name;
+            string loser = Player[CurrentPlayer == 1 ? 0 : 1].Name;
+            MessageBox.Show($"{winner} you are winner!\n{loser} you are loser!", "Game Over", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        public bool Reset() 
+        public bool Reset()
         {
             if (PlayTimeLine.Count <= 0)
                 return false;
@@ -199,15 +202,15 @@ namespace gameCaro
 
             btn.BackgroundImage = null;
 
-            if (PlayTimeLine.Count <= 0)                
-                {                   
-                    CurrentPlayer = 0;
-                }
-                else
-                {
-                    oldPoint = PlayTimeLine.Peek();
-                    CurrentPlayer = oldPoint.CurrentPlayer == 1 ? 0 : 1;
-                }
+            if (PlayTimeLine.Count <= 0)
+            {
+                CurrentPlayer = 0;
+            }
+            else
+            {
+                oldPoint = PlayTimeLine.Peek();
+                CurrentPlayer = oldPoint.CurrentPlayer == 1 ? 0 : 1;
+            }
 
             ChangePlayer();
 
@@ -221,7 +224,6 @@ namespace gameCaro
 
         private Point GetChessPoint(Button btn)
         {
-
             int vertical = Convert.ToInt32(btn.Tag); // Lấy tọa độ theo dòng
             int horizontal = Matrix[vertical].IndexOf(btn); // Lấy tọa độ theo cột
 
@@ -229,6 +231,7 @@ namespace gameCaro
 
             return point;
         }
+
         private bool isEndHorizontal(Button btn) // Kiểm tra dòng
         {
             Point point = GetChessPoint(btn);
@@ -256,6 +259,7 @@ namespace gameCaro
             }
             return countLeft + countRight == 5;
         }
+
         private bool isEndVertical(Button btn) // Kiểm tra cột
         {
             Point point = GetChessPoint(btn);
@@ -283,6 +287,7 @@ namespace gameCaro
             }
             return countTop + countBottom == 5;
         }
+
         private bool isEndPrimary(Button btn) // Kiểm tra đường chéo chính
         {
             Point point = GetChessPoint(btn);
@@ -316,6 +321,7 @@ namespace gameCaro
             }
             return countTop + countBottom == 5;
         }
+
         private bool isEndSub(Button btn) // Kiểm tra đường chéo phụ
         {
             Point point = GetChessPoint(btn);
@@ -350,11 +356,9 @@ namespace gameCaro
             return countTop + countBottom == 5;
         }
 
-
         private void Mark(Button btn) // đánh dấu ô click lên button người chơi 
         {
             btn.BackgroundImage = Player[CurrentPlayer].Mark;
-            
         }
 
         private void ChangePlayer() // chuyển lượt người chơi
@@ -365,8 +369,8 @@ namespace gameCaro
         }
 
         #endregion
-
     }
+
     public class ButtonClickEvent : EventArgs
     {
         private Point clickedPoint;
