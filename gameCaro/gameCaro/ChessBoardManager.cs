@@ -92,8 +92,8 @@ namespace gameCaro
 
             this.Player = new List<Player>()
             {
-                new Player("P1", Image.FromFile(Path.Combine(resourcePath, "dau_o.png"))), // Đường dẫn chính xác
-                new Player("P2", Image.FromFile(Path.Combine(resourcePath, "dau_x.png")))
+                new Player("Player1", Image.FromFile(Path.Combine(resourcePath, "dau_o.png"))), // Đường dẫn chính xác
+                new Player("Player2", Image.FromFile(Path.Combine(resourcePath, "dau_x.png")))
             };
             
         }
@@ -113,38 +113,29 @@ namespace gameCaro
 
             Matrix = new List<List<Button>>();
 
-            Button oldButton = new Button() { Width = 0, Location = new Point(0, 0) };//tạo mới button để xác đinnh vị trí ban đầu bàn cơ caro
-
-
-            for (int i = 0; i < Cons.CHESS_BOARD_HEIGHT; i++)// lặp qua từng hàng chieu cao của bàn cơ caro
+            for (int i = 0; i < Cons.CHESS_BOARD_HEIGHT; i++) // sửa lại điều kiện logic 
             {
                 Matrix.Add(new List<Button>());
 
-                for (int j = 0; j < Cons.CHESS_BOARD_WIDTH; j++)// lặp qua từng hàng chieu rong của bàn cơ caro
+                for (int j = 0; j < Cons.CHESS_BOARD_WIDTH; j++)
                 {
-                    Button btn = new Button()//tạo một button mới đại diện cho một ô của bàn caro
+                    Button btn = new Button()
                     {
-                        Width = Cons.CHESS_WIDTH,// độ rộng của ô
-                        Height = Cons.CHESS_HEIGHT,// chiều cao của ô
-                        Location = new Point(oldButton.Location.X + oldButton.Width, oldButton.Location.Y),// xác định vị trí ô của bàn caro
-                        BackgroundImageLayout = ImageLayout.Stretch, // thêm code này để hình ảnh png trong file resources vừa khích kích thước button 
+                        Width = Cons.CHESS_WIDTH,
+                        Height = Cons.CHESS_HEIGHT,
+                        Location = new Point(j * Cons.CHESS_WIDTH, i * Cons.CHESS_HEIGHT), //xác định vị trí chuẩn từng button
+                        BackgroundImageLayout = ImageLayout.Stretch,
                         Tag = i.ToString()
                     };
 
-                    btn.Click += btn_Click; // bắt sự kiện click vào button ô cờ 
+                    btn.Click += btn_Click;
 
-                    ChessBoard.Controls.Add(btn);// thêm button vào bàn caro
-
+                    ChessBoard.Controls.Add(btn);
                     Matrix[i].Add(btn);
-
-                    oldButton = btn;// cập nhật button cũ để tính toán vị trí tiếp theo
                 }
-                oldButton.Location = new Point(0, oldButton.Location.Y + Cons.CHESS_HEIGHT);// khi hết một hàng, thì xác định lại vị trí của button
-                oldButton.Width = 0;
-                oldButton.Height = 0;
             }
-            MessageBox.Show("Bàn cờ caro đã được tạo thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information); // hiện lên thông báo khi tạo bàn cơ caro
         }
+        
         void btn_Click(object sender, EventArgs e)
         {
             Button btn = sender as Button; // Ép kiểu sender về Button (nút được nhấn)
