@@ -60,9 +60,9 @@ private System.Windows.Forms.Button BtnLAN;
             // pictureBox_infoplayer
             // 
             this.pictureBox_infoplayer.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.pictureBox_infoplayer.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox_infoplayer.Location = new System.Drawing.Point(3, 3);
             this.pictureBox_infoplayer.Name = "pictureBox_infoplayer";
-            this.pictureBox_infoplayer.Size = new System.Drawing.Size(193, 46);
+            this.pictureBox_infoplayer.Size = new System.Drawing.Size(187, 144);
             this.pictureBox_infoplayer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_infoplayer.TabIndex = 6;
             this.pictureBox_infoplayer.TabStop = false;
@@ -76,7 +76,7 @@ private System.Windows.Forms.Button BtnLAN;
             this.pnlChessBoard.BackColor = System.Drawing.Color.White;
             this.pnlChessBoard.Location = new System.Drawing.Point(0, 27);
             this.pnlChessBoard.Name = "pnlChessBoard";
-            this.pnlChessBoard.Size = new System.Drawing.Size(979, 657);
+            this.pnlChessBoard.Size = new System.Drawing.Size(979, 654);
             this.pnlChessBoard.TabIndex = 0;
             this.pnlChessBoard.TabStop = true;
             // 
@@ -84,9 +84,9 @@ private System.Windows.Forms.Button BtnLAN;
             // 
             this.panelInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panelInfo.Controls.Add(this.pictureBox_infoplayer);
-            this.panelInfo.Location = new System.Drawing.Point(32, 285);
+            this.panelInfo.Location = new System.Drawing.Point(32, 335);
             this.panelInfo.Name = "panelInfo";
-            this.panelInfo.Size = new System.Drawing.Size(193, 47);
+            this.panelInfo.Size = new System.Drawing.Size(193, 150);
             this.panelInfo.TabIndex = 1;
             // 
             // pictureBox1
@@ -96,7 +96,7 @@ private System.Windows.Forms.Button BtnLAN;
             this.pictureBox1.Image = global::gameCaro.Properties.Resources.thi_dau_co_caro;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(193, 74);
+            this.pictureBox1.Size = new System.Drawing.Size(193, 155);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -124,9 +124,9 @@ private System.Windows.Forms.Button BtnLAN;
             // 
             // rtbChatBox
             // 
-            this.rtbChatBox.Location = new System.Drawing.Point(31, 353);
+            this.rtbChatBox.Location = new System.Drawing.Point(31, 491);
             this.rtbChatBox.Name = "rtbChatBox";
-            this.rtbChatBox.Size = new System.Drawing.Size(194, 240);
+            this.rtbChatBox.Size = new System.Drawing.Size(194, 102);
             this.rtbChatBox.TabIndex = 13;
             this.rtbChatBox.Text = "";
             this.rtbChatBox.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged_1);
@@ -143,9 +143,9 @@ private System.Windows.Forms.Button BtnLAN;
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.pictureBox1);
-            this.panel1.Location = new System.Drawing.Point(32, 204);
+            this.panel1.Location = new System.Drawing.Point(32, 171);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(193, 75);
+            this.panel1.Size = new System.Drawing.Size(193, 158);
             this.panel1.TabIndex = 7;
             // 
             // label1
@@ -162,7 +162,7 @@ private System.Windows.Forms.Button BtnLAN;
             // textBox_playername
             // 
             this.textBox_playername.Font = new System.Drawing.Font("Times New Roman", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_playername.Location = new System.Drawing.Point(31, 89);
+            this.textBox_playername.Location = new System.Drawing.Point(31, 80);
             this.textBox_playername.Name = "textBox_playername";
             this.textBox_playername.ReadOnly = true;
             this.textBox_playername.Size = new System.Drawing.Size(193, 22);
@@ -173,7 +173,7 @@ private System.Windows.Forms.Button BtnLAN;
             // 
             // BtnLAN
             // 
-            this.BtnLAN.Location = new System.Drawing.Point(31, 169);
+            this.BtnLAN.Location = new System.Drawing.Point(31, 136);
             this.BtnLAN.Name = "BtnLAN";
             this.BtnLAN.Size = new System.Drawing.Size(193, 29);
             this.BtnLAN.TabIndex = 4;
@@ -184,7 +184,7 @@ private System.Windows.Forms.Button BtnLAN;
             // textbox_IP
             // 
             this.textbox_IP.Font = new System.Drawing.Font("Times New Roman", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textbox_IP.Location = new System.Drawing.Point(31, 129);
+            this.textbox_IP.Location = new System.Drawing.Point(31, 108);
             this.textbox_IP.Name = "textbox_IP";
             this.textbox_IP.Size = new System.Drawing.Size(193, 22);
             this.textbox_IP.TabIndex = 3;
@@ -262,7 +262,7 @@ private System.Windows.Forms.Button BtnLAN;
             // Form1
             // 
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.ClientSize = new System.Drawing.Size(1231, 680);
+            this.ClientSize = new System.Drawing.Size(1231, 673);
             this.Controls.Add(this.panelChat);
             this.Controls.Add(this.pnlChessBoard);
             this.Controls.Add(this.menuStrip1);
