@@ -10,7 +10,6 @@ private System.Windows.Forms.Panel pnlChessBoard;
 private System.Windows.Forms.Panel panelInfo;
 private System.Windows.Forms.Panel panelChat;
 private System.Windows.Forms.TextBox textbox_IP;
-private System.Windows.Forms.Button BtnLAN;
 
     /// <summary>
     /// Clean up any resources being used.
@@ -34,12 +33,12 @@ private System.Windows.Forms.Button BtnLAN;
             this.panelInfo = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelChat = new System.Windows.Forms.Panel();
+            this.BtnLAN = new System.Windows.Forms.Button();
             this.rtbChatBox = new System.Windows.Forms.RichTextBox();
             this.progressBar_cooldown = new System.Windows.Forms.ProgressBar();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox_playername = new System.Windows.Forms.TextBox();
-            this.BtnLAN = new System.Windows.Forms.Button();
             this.textbox_IP = new System.Windows.Forms.TextBox();
             this.txtChatInput = new System.Windows.Forms.TextBox();
             this.btnSendChat = new System.Windows.Forms.Button();
@@ -106,13 +105,13 @@ private System.Windows.Forms.Button BtnLAN;
             // 
             this.panelChat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panelChat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.panelChat.Controls.Add(this.BtnLAN);
             this.panelChat.Controls.Add(this.rtbChatBox);
             this.panelChat.Controls.Add(this.progressBar_cooldown);
             this.panelChat.Controls.Add(this.panel1);
             this.panelChat.Controls.Add(this.label1);
             this.panelChat.Controls.Add(this.textBox_playername);
             this.panelChat.Controls.Add(this.panelInfo);
-            this.panelChat.Controls.Add(this.BtnLAN);
             this.panelChat.Controls.Add(this.textbox_IP);
             this.panelChat.Controls.Add(this.txtChatInput);
             this.panelChat.Controls.Add(this.btnSendChat);
@@ -122,11 +121,21 @@ private System.Windows.Forms.Button BtnLAN;
             this.panelChat.TabIndex = 2;
             this.panelChat.Paint += new System.Windows.Forms.PaintEventHandler(this.panelChat_Paint);
             // 
+            // BtnLAN
+            // 
+            this.BtnLAN.Location = new System.Drawing.Point(31, 136);
+            this.BtnLAN.Name = "BtnLAN";
+            this.BtnLAN.Size = new System.Drawing.Size(194, 29);
+            this.BtnLAN.TabIndex = 15;
+            this.BtnLAN.Text = "Start/Manual Start";
+            this.BtnLAN.UseVisualStyleBackColor = true;
+            this.BtnLAN.Click += new System.EventHandler(this.BtnLAN_Click_1);
+            // 
             // rtbChatBox
             // 
             this.rtbChatBox.Location = new System.Drawing.Point(31, 491);
             this.rtbChatBox.Name = "rtbChatBox";
-            this.rtbChatBox.Size = new System.Drawing.Size(194, 102);
+            this.rtbChatBox.Size = new System.Drawing.Size(194, 114);
             this.rtbChatBox.TabIndex = 13;
             this.rtbChatBox.Text = "";
             this.rtbChatBox.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged_1);
@@ -171,16 +180,6 @@ private System.Windows.Forms.Button BtnLAN;
             this.textBox_playername.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBox_playername.TextChanged += new System.EventHandler(this.textBox_playername_TextChanged);
             // 
-            // BtnLAN
-            // 
-            this.BtnLAN.Location = new System.Drawing.Point(31, 136);
-            this.BtnLAN.Name = "BtnLAN";
-            this.BtnLAN.Size = new System.Drawing.Size(193, 29);
-            this.BtnLAN.TabIndex = 4;
-            this.BtnLAN.Text = "LAN Connect";
-            this.BtnLAN.UseVisualStyleBackColor = true;
-            this.BtnLAN.Click += new System.EventHandler(this.BtnLAN_Click);
-            // 
             // textbox_IP
             // 
             this.textbox_IP.Font = new System.Drawing.Font("Times New Roman", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -194,7 +193,7 @@ private System.Windows.Forms.Button BtnLAN;
             // 
             // txtChatInput
             // 
-            this.txtChatInput.Location = new System.Drawing.Point(31, 599);
+            this.txtChatInput.Location = new System.Drawing.Point(31, 612);
             this.txtChatInput.Name = "txtChatInput";
             this.txtChatInput.Size = new System.Drawing.Size(138, 22);
             this.txtChatInput.TabIndex = 11;
@@ -202,7 +201,7 @@ private System.Windows.Forms.Button BtnLAN;
             // 
             // btnSendChat
             // 
-            this.btnSendChat.Location = new System.Drawing.Point(178, 598);
+            this.btnSendChat.Location = new System.Drawing.Point(178, 611);
             this.btnSendChat.Name = "btnSendChat";
             this.btnSendChat.Size = new System.Drawing.Size(47, 23);
             this.btnSendChat.TabIndex = 12;
@@ -301,5 +300,6 @@ private System.Windows.Forms.Button BtnLAN;
         private System.Windows.Forms.Button btnSendChat;
         private System.Windows.Forms.TextBox txtChatInput;
         private System.Windows.Forms.RichTextBox rtbChatBox;
+        private System.Windows.Forms.Button BtnLAN;
     }
 }
