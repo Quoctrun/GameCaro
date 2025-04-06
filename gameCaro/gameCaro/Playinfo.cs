@@ -17,7 +17,6 @@ namespace gameCaro
         }
 
         private int currentPlayer;
-
         public int CurrentPlayer
         {
             get { return currentPlayer; }
