@@ -16,6 +16,7 @@ namespace GameCaro
     {
         #region Client
         Socket client;
+        public bool IsConnected => client?.Connected ?? false;
         public bool ConnectServer()
         {
             IPEndPoint iep = new IPEndPoint(IPAddress.Parse(IP), PORT);
@@ -47,6 +48,7 @@ namespace GameCaro
             Thread acceptClient = new Thread(() =>
             {
                 client = server.Accept();
+                OnClientConnected?.Invoke("Kết nối với Client thành công");
             });
             acceptClient.IsBackground = true;
             acceptClient.Start();
@@ -58,6 +60,8 @@ namespace GameCaro
         public int PORT = 9999;
         public const int BUFFER = 1024;
         public bool isServer = true;
+
+        public event Action<string> OnClientConnected;
 
         public bool Send(object data)
         {
@@ -76,13 +80,15 @@ namespace GameCaro
 
         private bool SendData(Socket target, byte[] data)
         {
-            return target.Send(data) == 1 ? true : false;
+            //return target.Send(data) == 1 ? true : false;
+            return target.Send(data) > 0;
         }
 
 
         private bool ReceiveData(Socket target, byte[] data)
         {
-            return target.Receive(data) == 1 ? true : false;
+            return target.Receive(data) > 0;
+            //return target.Receive(data) == 1 ? true : false;
         }
         /// <summary>
         /// Nén đối tượng thành mảng byte[]

@@ -22,6 +22,8 @@ namespace gameCaro
         #region Properties
         ChessBoardManager ChessBoard; // Khai báo một đối tượng quản lý bàn cờ Caro
         SocketManager socket;
+        // Cờ để đánh dấu liệu đang trong quá trình kết nối hay không
+        bool isConnecting = false;
         #endregion
         public Form1()
         {
@@ -37,13 +39,25 @@ namespace gameCaro
             progressBar_cooldown.Step = Cons.COOL_DOWN_STEP;// Đặt giá trị bước nhảy của progressbar
             progressBar_cooldown.Maximum = Cons.COOL_DOWN_TIME;// Đặt giá trị lớn nhất của progressbar
             progressBar_cooldown.Value = 0;// Đặt giá trị ban đầu của progressbar
-            
+
             tmcooldown.Interval = Cons.COOL_DOWN_INTERVAL;// Đặt thời gian cập nhật của progressbar
 
             ChessBoard.DrawChessBoard();// Vẽ bàn cờ khi Form được khởi tạo
 
             socket = new SocketManager();// Khởi tạo đối tượng socket   
+            NewGame();
 
+            // Đăng ký sự kiện khi khách hàng kết nối
+            socket.OnClientConnected += (message) =>
+            {
+                // Đảm bảo cập nhật giao diện người dùng trên luồng chính
+                this.Invoke((MethodInvoker)(() =>
+                {
+                    rtbChatBox.AppendText(message + Environment.NewLine);
+                    Listen(); // Bắt đầu lắng nghe dữ liệu đến
+                }));
+
+            };
         }
     
         #region
@@ -51,7 +65,8 @@ namespace gameCaro
         {
             tmcooldown.Stop();// Dừng đếm thời gian
             pnlChessBoard.Enabled = false;// Không cho người chơi đánh tiếp
-            resetToolStripMenuItem.Enabled = false;// Không cho phép quay lại
+            //resetToolStripMenuItem.Enabled = false;// Không cho phép quay lại
+            ChessBoard.IsMyTurn = false;
         }
 
         void NewGame()
@@ -64,22 +79,21 @@ namespace gameCaro
 
         void Quit()
         {
-            if (MessageBox.Show("Bạn có chắc chắn muốn thoát?", "Thông báo", MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
+            //if (MessageBox.Show("Bạn có chắc chắn muốn thoát?", "Thông báo", MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
                 Application.Exit();// Thoát ứng dụng           
         }
 
-        void Reset()
-        {
-            ChessBoard.Reset();// Đặt lại bàn cờ
-        }
+        //void Reset()
+        //{
+        //    ChessBoard.Reset();// Đặt lại bàn cờ
+        //}
         private void ChessBoard_PlayerMarked(object sender, ButtonClickEvent e)
         {
             tmcooldown.Start();// Bắt đầu đếm thời gian
-            pnlChessBoard.Enabled = false;// Không cho người chơi đánh tiếp
+            //pnlChessBoard.Enabled = false;// Không cho người chơi đánh tiếp
+            ChessBoard.IsMyTurn = false;
             progressBar_cooldown.Value = 0;// Đặt giá trị ban đầu của progressbar
             socket.Send(new SocketData((int)SocketCommand.SEND_POINT, "", e.ClickedPoint));
-
-
             Listen();
         }
         private void ChessBoard_EndedGame(object sender, EventArgs e)
@@ -97,10 +111,11 @@ namespace gameCaro
         {
             progressBar_cooldown.PerformStep();// Cập nhật giá trị của progressbar
             
-            if (progressBar_cooldown.Value >= progressBar_cooldown.Maximum)
+            if (progressBar_cooldown.Value >= progressBar_cooldown.Maximum && ChessBoard.IsMyTurn)
             {
                 
                 EndGame();// Kết thúc game
+                MessageBox.Show("Bạn đã thua do hết thời gian!");
                 socket.Send(new SocketData((int)SocketCommand.TIME_OUT, "", new Point()));
             }
         }
@@ -133,11 +148,13 @@ namespace gameCaro
         {
             NewGame();
             socket.Send(new SocketData((int)SocketCommand.NEW_GAME, "", new Point()));
-            pnlChessBoard.Enabled = true;
+            //pnlChessBoard.Enabled = true;
+            ChessBoard.IsMyTurn = true;
         }
+
         private void resetToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Reset();
+            //Reset();
         }
       
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -155,6 +172,8 @@ namespace gameCaro
             {
                 try
                 {
+                    if (!socket.IsConnected) return;
+
                     socket.Send(new SocketData((int)SocketCommand.QUIT, "", new Point()));
                 }
                 catch { }
@@ -162,28 +181,61 @@ namespace gameCaro
         }
 
         #endregion
-
-        private void BtnLAN_Click(object sender, EventArgs e)
+        private void BtnLAN_Click_1(object sender, EventArgs e)
         {
-            socket.IP = textbox_IP.Text; // Lấy IP từ TextBox
+            //socket.IP = textbox_IP.Text; // Lấy IP từ TextBox
 
-            if (!socket.ConnectServer()) // Nếu không thể kết nối, tạo server
-            {
-                socket.isServer = true;
-                pnlChessBoard.Enabled = true; // Bật bàn cờ cho người tạo server
-                socket.CreateServer(); // Tạo server
-                MessageBox.Show("Server đã được tạo!");
-            }
-            else // Nếu kết nối thành công
-            {
-                socket.isServer = false;
-                pnlChessBoard.Enabled = false; // Đối thủ chờ lượt
-                MessageBox.Show("Kết nối thành công!");
-            }
+            //if (!socket.ConnectServer()) // Nếu không thể kết nối, tạo server
+            ///{
+            //    socket.isServer = true;
+            //     pnlChessBoard.Enabled = true; // Bật bàn cờ cho người tạo server
+            //     socket.CreateServer(); // Tạo server
+            //     MessageBox.Show("Server đã được tạo!");
+            // }
+            // else // Nếu kết nối thành công
+            // {
+            //     socket.isServer = false;
+            ////      pnlChessBoard.Enabled = false; // Đối thủ chờ lượt
+            //     MessageBox.Show("Kết nối thành công!");
+            // }
 
             // Gọi hàm Listen ngay sau khi kết nối thành công
-            Listen();
+            //  Listen();
+
+            if (socket.IsConnected) // Kiểm tra xem đã kết nối chưa
+            {
+                MessageBox.Show("Đã kết nối rồi");
+                return;
+            }
+            else if (isConnecting)
+            {
+                MessageBox.Show("Đang trong quá trình kết nối. Vui lòng đợi...");
+                return;
+            }
+            isConnecting = true; // Đặt cờ đang kết nối
+            socket.IP = textbox_IP.Text; // Lấy địa chỉ IP từ textbox
+
+            if (!socket.ConnectServer()) // Cố gắng kết nối như một client
+            {
+                // Nếu kết nối thất bại, trở thành server
+                socket.isServer = true;
+                //pnlBanCo.Enabled = true; // Kích hoạt bảng cờ cho server
+                ChessBoard.IsMyTurn = false;
+                socket.CreateServer(); // Tạo socket server
+                rtbChatBox.AppendText("Server đang chờ kết nối..." + Environment.NewLine); // "Server is waiting for connection..."
+            }
+            else
+            {
+                // Kết nối thành công như một client
+                socket.isServer = false;
+                //pnlBanCo.Enabled = false; // Vô hiệu hóa bảng cờ cho đến khi đối thủ di chuyển
+                ChessBoard.IsMyTurn = true;
+                rtbChatBox.AppendText("Đã kết nối với server." + Environment.NewLine); // "Connected to server."
+                Listen(); // Bắt đầu lắng nghe dữ liệu đến
+            }
         }
+
+        
         private void pictureBox1_Click(object sender, EventArgs e)
         {
 
@@ -226,32 +278,33 @@ namespace gameCaro
                     this.Invoke((MethodInvoker)(() =>
                     {
                         NewGame();
-                        pnlChessBoard.Enabled = false;
+                        //pnlChessBoard.Enabled = false;
                     }));
                     break;
                 case (int)SocketCommand.SEND_POINT:
                     this.Invoke((MethodInvoker)(() =>
                     {
                      progressBar_cooldown.Value = 0;
-                     pnlChessBoard.Enabled = true;
+                     //pnlChessBoard.Enabled = true;
                      tmcooldown.Start();
                      ChessBoard.OtherPlayerMark(data.Point);
+                        ChessBoard.IsMyTurn = true;
                     }));
                     break;
                     
-        case (int)SocketCommand.SEND_MESSAGE: // Xử lý tin nhắn nhận được
-            this.Invoke((MethodInvoker)(() =>
-            {
-                rtbChatBox.AppendText("Opponent: " + data.Message + Environment.NewLine);
-            }));
-            break;
-                case (int)SocketCommand.UNDO:
+                case (int)SocketCommand.SEND_MESSAGE: // Xử lý tin nhắn nhận được
+                    this.Invoke((MethodInvoker)(() =>
+                    {
+                        rtbChatBox.AppendText("Opponent: " + data.Message + Environment.NewLine);
+                    }));
                     break;
+
                 case (int)SocketCommand.END_GAME:
-                    MessageBox.Show("Đã 5 con trên 1 hàng");
+                    //MessageBox.Show("Đã 5 con trên 1 hàng");
                     break;
                 case (int)SocketCommand.TIME_OUT:
-                    MessageBox.Show("Hết giờ");
+                    EndGame();
+                    MessageBox.Show("Bạn đã thắng! Đối thủ hết thời gian.");
                     break;
                 case (int)SocketCommand.QUIT:
                     tmcooldown.Stop();
