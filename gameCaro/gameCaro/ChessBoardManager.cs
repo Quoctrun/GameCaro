@@ -35,7 +35,19 @@ namespace gameCaro
         public TextBox PlayerName1 { get => PlayerName; set => PlayerName = value; }
 
 
+        private bool isMyTurn;
+        public bool IsMyTurn
+        {
+            get { return isMyTurn; }
+            set { isMyTurn = value; }
+        }
 
+        private int count = 0;
+        public int Count
+        {
+            get { return count; }
+            set { count = value; }
+        }
 
         private List<List<Button>> matrix;
 
@@ -106,7 +118,7 @@ namespace gameCaro
             ChessBoard.Enabled = true;// bàn cờ caro có thể chơi
             ChessBoard.Controls.Clear();// xóa các button cũ trên bàn cờ caro
 
-            PlayTimeLine = new Stack<Playinfo>();// khởi tạo stack lưu trữ lịch sử đánh cờ
+            //PlayTimeLine = new Stack<Playinfo>();// khởi tạo stack lưu trữ lịch sử đánh cờ
 
             CurrentPlayer = 0;
             ChangePlayer(); // đổi lượt chơi cho người khác
@@ -138,16 +150,25 @@ namespace gameCaro
         
         void btn_Click(object sender, EventArgs e)
         {
-            Button btn = sender as Button; // Ép kiểu sender về Button (nút được nhấn)
+            //Button btn = sender as Button; // Ép kiểu sender về Button (nút được nhấn)
 
-            if (btn.BackgroundImage != null) // Kiểm tra nếu nút đã có hình (đã được đánh dấu) thì không làm gì cả
+            //if (btn.BackgroundImage != null) // Kiểm tra nếu nút đã có hình (đã được đánh dấu) thì không làm gì cả
+            //   return;
+
+            if (!IsMyTurn) // Kiểm tra xem có phải lượt của người chơi không
+            {
                 return;
+            }
+            Button btn = sender as Button; // Lấy button được nhấp
+            if (btn.BackgroundImage != null) // Nếu button đã có hình nền
+                return; // Không làm gì
 
             Mark(btn); // Đánh dấu ô cờ với hình tương ứng của người chơi hiện tại
 
-            PlayTimeLine.Push(new Playinfo(GetChessPoint(btn), CurrentPlayer));
+            IsMyTurn = false;
+           // PlayTimeLine.Push(new Playinfo(GetChessPoint(btn), CurrentPlayer));
 
-            CurrentPlayer = CurrentPlayer == 1 ? 0 : 1;// sài toán tử ba ngôi dùng để chuyên lượt chơi người này sang người chơi khác (ternary operator)
+           // CurrentPlayer = CurrentPlayer == 1 ? 0 : 1;// sài toán tử ba ngôi dùng để chuyên lượt chơi người này sang người chơi khác (ternary operator)
 
             ChangePlayer(); // Chuyển lượt sang người chơi tiếp theo
              
@@ -157,6 +178,19 @@ namespace gameCaro
             if (isEndGame(btn))
             {
                 EndGame();
+                MessageBox.Show("Bạn đã thắng!");
+                return;
+            }
+
+            if (count == Cons.CHESS_BOARD_HEIGHT * Cons.CHESS_BOARD_WIDTH - 1)
+            {
+                count = 0;
+                EndGame();
+                MessageBox.Show("Bạn cờ để hết. Hòa!");
+            }
+            else
+            {
+                count++;
             }
         }
         public void OtherPlayerMark(Point point) // Đánh dấu ô cờ của người chơi khác
@@ -164,46 +198,61 @@ namespace gameCaro
             Button btn = Matrix[point.Y][point.X];
             if (btn.BackgroundImage != null)
                 return;
+
             Mark(btn);
-            PlayTimeLine.Push(new Playinfo(point, CurrentPlayer));
-            CurrentPlayer = CurrentPlayer == 1 ? 0 : 1;
+           // PlayTimeLine.Push(new Playinfo(point, CurrentPlayer));
+           // CurrentPlayer = CurrentPlayer == 1 ? 0 : 1;
             ChangePlayer();
     
             if (isEndGame(btn))
             {
                 EndGame();
+                MessageBox.Show("Bạn đã thua, đừng nản lòng, làm ván mới nhé!");
+                return;
+            }
+
+            if (count == Cons.CHESS_BOARD_HEIGHT * Cons.CHESS_BOARD_WIDTH - 1)
+            {
+                count = 0;
+                EndGame();
+                MessageBox.Show("Bạn cờ để hết. Hòa!");
+            }
+            else
+            {
+                count++;
             }
         }
+
         public void EndGame() // Hộp thoại thông báo 
         {
             if (endedGame != null)
                 endedGame(this, new EventArgs());
         }
 
-        public bool Reset() 
-        {
-            if (PlayTimeLine.Count <= 0)
-                return false;
-
-            Playinfo oldPoint = PlayTimeLine.Pop();
-            Button btn = Matrix[oldPoint.Point.Y][oldPoint.Point.X];
-
-            btn.BackgroundImage = null;
-
-            if (PlayTimeLine.Count <= 0)                
-                {                   
-                    CurrentPlayer = 0;
-                }
-                else
-                {
-                    oldPoint = PlayTimeLine.Peek();
-                    CurrentPlayer = oldPoint.CurrentPlayer == 1 ? 0 : 1;
-                }
-
-            ChangePlayer();
-
-            return false;
-        }
+       // public bool Reset() 
+        //{
+        //    if (PlayTimeLine.Count <= 0)
+        //        return false;
+        //
+        //    Playinfo oldPoint = PlayTimeLine.Pop();
+        ///    Button btn = Matrix[oldPoint.Point.Y][oldPoint.Point.X];
+/////
+        //    btn.BackgroundImage = null;
+//
+        //    if (PlayTimeLine.Count <= 0)                
+        //        {                   
+        //            CurrentPlayer = 0;
+        //        }
+         //       else
+        //        {
+        //            oldPoint = PlayTimeLine.Peek();
+        ////            CurrentPlayer = oldPoint.CurrentPlayer == 1 ? 0 : 1;
+        //        }
+        //
+        //    ChangePlayer();
+        //
+        //    return false;
+        //}
 
         private bool isEndGame(Button btn)
         {
@@ -220,132 +269,134 @@ namespace gameCaro
 
             return point;
         }
-        private bool isEndHorizontal(Button btn) // Kiểm tra dòng
+
+        private bool isEndHorizontal(Button btn)
         {
-            Point point = GetChessPoint(btn);
-
-            int countLeft = 0;
-            for (int i = point.X; i >= 0; i--)
+            Point point = GetChessPoint(btn); // Lấy điểm của button
+            int countLeft = 0; // Đếm số ô liên tiếp sang trái
+            for (int i = point.X; i >= 0; i--) // Lặp từ cột hiện tại sang trái
             {
-                if (Matrix[point.Y][i].BackgroundImage == btn.BackgroundImage)
+                if (Matrix[point.Y][i].BackgroundImage == btn.BackgroundImage) // Nếu ô cùng biểu tượng
                 {
-                    countLeft++;
+                    countLeft++; // Tăng đếm
                 }
                 else
-                    break;
+                    break; // Dừng nếu không giống
             }
-
-            int countRight = 0;
-            for (int i = point.X + 1; i < Cons.CHESS_BOARD_WIDTH; i++)
+            int countRight = 0; // Đếm số ô liên tiếp sang phải
+            for (int i = point.X + 1; i < Cons.CHESS_BOARD_WIDTH; i++) // Lặp từ cột hiện tại sang phải
             {
-                if (Matrix[point.Y][i].BackgroundImage == btn.BackgroundImage)
+                if (Matrix[point.Y][i].BackgroundImage == btn.BackgroundImage) // Nếu ô cùng biểu tượng
                 {
-                    countRight++;
+                    countRight++; // Tăng đếm
                 }
                 else
-                    break;
+                    break; // Dừng nếu không giống
             }
-            return countLeft + countRight == 5;
+            return countLeft + countRight == 5; // Trả về true nếu tổng bằng 5
         }
-        private bool isEndVertical(Button btn) // Kiểm tra cột
+
+        // Kiểm tra xem có đủ 5 ô liên tiếp theo chiều dọc không
+        private bool isEndVertical(Button btn)
         {
-            Point point = GetChessPoint(btn);
-
-            int countTop = 0;
-            for (int i = point.Y; i >= 0; i--)
+            Point point = GetChessPoint(btn); // Lấy điểm của button
+            int countTop = 0; // Đếm số ô liên tiếp phía trên
+            for (int i = point.Y; i >= 0; i--) // Lặp từ hàng hiện tại lên trên
             {
-                if (Matrix[i][point.X].BackgroundImage == btn.BackgroundImage)
+                if (Matrix[i][point.X].BackgroundImage == btn.BackgroundImage) // Nếu ô cùng biểu tượng
                 {
-                    countTop++;
+                    countTop++; // Tăng đếm
                 }
                 else
-                    break;
+                    break; // Dừng nếu không giống
             }
-
-            int countBottom = 0;
-            for (int i = point.Y + 1; i < Cons.CHESS_BOARD_HEIGHT; i++)
+            int countBottom = 0; // Đếm số ô liên tiếp phía dưới
+            for (int i = point.Y + 1; i < Cons.CHESS_BOARD_HEIGHT; i++) // Lặp từ hàng hiện tại xuống dưới
             {
-                if (Matrix[i][point.X].BackgroundImage == btn.BackgroundImage)
+                if (Matrix[i][point.X].BackgroundImage == btn.BackgroundImage) // Nếu ô cùng biểu tượng
                 {
-                    countBottom++;
+                    countBottom++; // Tăng đếm
                 }
                 else
-                    break;
+                    break; // Dừng nếu không giống
             }
-            return countTop + countBottom == 5;
+            return countTop + countBottom == 5; // Trả về true nếu tổng bằng 5
         }
-        private bool isEndPrimary(Button btn) // Kiểm tra đường chéo chính
+
+        // Kiểm tra xem có đủ 5 ô liên tiếp theo đường chéo chính không
+        private bool isEndPrimary(Button btn)
         {
-            Point point = GetChessPoint(btn);
-
-            int countTop = 0;
-            for (int i = 0; i <= point.X; i++)
+            Point point = GetChessPoint(btn); // Lấy điểm của button
+            int countTop = 0; // Đếm số ô liên tiếp trên đường chéo chính
+            for (int i = 0; i <= point.X; i++) // Lặp từ vị trí hiện tại đi lên trên và sang phải
             {
-                if (point.X - i < 0 || point.Y - i < 0)
+                if (point.X + i >= Cons.CHESS_BOARD_WIDTH || point.Y - i < 0) // Kiểm tra giới hạn
                     break;
 
-                if (Matrix[point.Y - i][point.X - i].BackgroundImage == btn.BackgroundImage)
+                if (Matrix[point.Y - i][point.X + i].BackgroundImage == btn.BackgroundImage) // Nếu ô cùng biểu tượng
                 {
-                    countTop++;
+                    countTop++; // Tăng đếm
                 }
                 else
-                    break;
+                    break; // Dừng nếu không giống
             }
-
-            int countBottom = 0;
-            for (int i = 1; i <= Cons.CHESS_BOARD_WIDTH - point.X; i++)
+            int countBottom = 0; // Đếm số ô liên tiếp dưới đường chéo chính
+            for (int i = 1; i <= Cons.CHESS_BOARD_WIDTH - point.X; i++) // Lặp từ vị trí hiện tại đi xuống dưới và sang trái
             {
-                if (point.Y + i >= Cons.CHESS_BOARD_HEIGHT || point.X + i >= Cons.CHESS_BOARD_WIDTH)
-                    break;
-
-                if (Matrix[point.Y + i][point.X + i].BackgroundImage == btn.BackgroundImage)
-                {
-                    countBottom++;
-                }
-                else
-                    break;
-            }
-            return countTop + countBottom == 5;
-        }
-        private bool isEndSub(Button btn) // Kiểm tra đường chéo phụ
-        {
-            Point point = GetChessPoint(btn);
-
-            int countTop = 0;
-            for (int i = 0; i <= point.X; i++)
-            {
-                if (point.X + i > Cons.CHESS_BOARD_WIDTH || point.Y - i < 0)
-                    break;
-
-                if (Matrix[point.Y - i][point.X + i].BackgroundImage == btn.BackgroundImage)
-                {
-                    countTop++;
-                }
-                else
-                    break;
-            }
-
-            int countBottom = 0;
-            for (int i = 1; i <= Cons.CHESS_BOARD_WIDTH - point.X; i++)
-            {
+                // Kiểm tra giới hạn hàng và cột
                 if (point.Y + i >= Cons.CHESS_BOARD_HEIGHT || point.X - i < 0)
                     break;
 
+                // Nếu ô cùng biểu tượng
                 if (Matrix[point.Y + i][point.X - i].BackgroundImage == btn.BackgroundImage)
                 {
-                    countBottom++;
+                    countBottom++; // Tăng đếm
                 }
                 else
-                    break;
+                    break; // Dừng nếu không giống
             }
-            return countTop + countBottom == 5;
+
+            return countTop + countBottom == 5; // Trả về true nếu tổng bằng 5
+        }
+
+        // Kiểm tra xem có đủ 5 ô liên tiếp theo đường chéo phụ không
+        private bool isEndSub(Button btn)
+        {
+            Point point = GetChessPoint(btn); // Lấy điểm của button
+            int countTop = 0; // Đếm số ô liên tiếp trên đường chéo phụ
+            for (int i = 0; i <= point.X; i++) // Lặp từ vị trí hiện tại đi lên trên và sang trái
+            {
+                if (point.X - i < 0 || point.Y - i < 0) // Kiểm tra giới hạn
+                    break;
+
+                if (Matrix[point.Y - i][point.X - i].BackgroundImage == btn.BackgroundImage) // Nếu ô cùng biểu tượng
+                {
+                    countTop++; // Tăng đếm
+                }
+                else
+                    break; // Dừng nếu không giống
+            }
+            int countBottom = 0; // Đếm số ô liên tiếp dưới đường chéo phụ
+            for (int i = 1; i <= Cons.CHESS_BOARD_WIDTH - point.X; i++) // Lặp từ vị trí hiện tại đi xuống dưới và sang phải
+            {
+                if (point.Y + i >= Cons.CHESS_BOARD_HEIGHT || point.X + i >= Cons.CHESS_BOARD_WIDTH) // Kiểm tra giới hạn
+                    break;
+                if (Matrix[point.Y + i][point.X + i].BackgroundImage == btn.BackgroundImage) // Nếu ô cùng biểu tượng
+                {
+                    countBottom++; // Tăng đếm
+                }
+                else
+                    break; // Dừng nếu không giống
+            }
+            return countTop + countBottom == 5; // Trả về true nếu tổng bằng 5
         }
 
 
         private void Mark(Button btn) // đánh dấu ô click lên button người chơi 
         {
             btn.BackgroundImage = Player[CurrentPlayer].Mark;
-            
+            CurrentPlayer = CurrentPlayer == 1 ? 0 : 1;
+
         }
 
         private void ChangePlayer() // chuyển lượt người chơi
